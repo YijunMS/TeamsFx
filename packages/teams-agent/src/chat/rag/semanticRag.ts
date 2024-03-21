@@ -32,14 +32,34 @@ export async function initModelByDocAndMetadata(docs: string[], metadata: object
   let mod1 = await _importDynamic('@langchain/community/embeddings/hf_transformers');
   let mod2 = await _importDynamic('langchain/vectorstores/memory');
   let mod3 = await _importDynamic('ml-distance');
+  let faiss = await _importDynamic('@langchain/community/vectorstores/faiss');
   const model = new mod1.HuggingFaceTransformersEmbeddings({
     modelName: "Xenova/all-MiniLM-L6-v2",
   });
-  const vectorStore = mod2.MemoryVectorStore.fromTexts(
-    docs,
-    metadata,
-    model,
-    { similarity: mod3.similarity.cosine }
-  );
-  return vectorStore;
+  // const vectorStore = mod2.MemoryVectorStore.fromTexts(
+  //   docs,
+  //   metadata,
+  //   model,
+  //   { similarity: mod3.similarity.cosine }
+  // );
+  // return vectorStore;
+
+  {
+    const vectorStore = await faiss.FaissStore.fromTexts(
+      docs,
+      metadata,
+      model,
+      { similarity: mod3.similarity.cosine }
+    )
+    await vectorStore.save("./vector.txt");
+    return vectorStore
+  }
+
+  // {
+  //   const vectorStore = await faiss.FaissStore.load("./vector.txt",
+  //     model,
+  //     { similarity: mod3.similarity.cosine }
+  //   );
+  //   return vectorStore
+  // }
 }

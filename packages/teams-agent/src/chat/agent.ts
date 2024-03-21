@@ -40,6 +40,8 @@ import {
   LanguageModelID,
   getResponseAsStringCopilotInteraction
 } from "./copilotInteractions";
+import { prepareDocs } from "./rag/rag";
+import { initModelByDocAndMetadata } from "./rag/semanticRag";
 import { SlashCommandHandlerResult, SlashCommandsOwner } from "./slashCommands";
 
 export const CREATE_WXP_PROJECT_COMMAND_ID = 'teamsfx.createWxpProject';
@@ -193,11 +195,11 @@ function getCommands(
 async function defaultHandler(
   request: AgentRequest
 ): Promise<SlashCommandHandlerResult> {
-  //const [docs, metadata] = prepareDocs();
-  //let vector = await initModelByDocAndMetadata(Array.from(metadata.keys()), Array.from(metadata.values()));
-  //let result = vector.similaritySearch(request.userPrompt, 3);
-  //console.log(result);
-  //return undefined;
+  const [docs, metadata] = prepareDocs();
+  let vector = await initModelByDocAndMetadata(Array.from(metadata.keys()), Array.from(metadata.values()));
+  let result = await vector.similaritySearch(request.userPrompt, 3);
+  console.log(result);
+  return undefined;
   let host = "";
   let codeMathToBeInserted = "";
   const srcRoot = os.homedir();
