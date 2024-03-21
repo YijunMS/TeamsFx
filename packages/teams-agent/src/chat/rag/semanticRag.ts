@@ -36,6 +36,7 @@ export async function initModelByDocAndMetadata(docs: string[], metadata: object
   const model = new mod1.HuggingFaceTransformersEmbeddings({
     modelName: "Xenova/all-MiniLM-L6-v2",
   });
+  const loadFromFile = false;
   // const vectorStore = mod2.MemoryVectorStore.fromTexts(
   //   docs,
   //   metadata,
@@ -44,7 +45,7 @@ export async function initModelByDocAndMetadata(docs: string[], metadata: object
   // );
   // return vectorStore;
 
-  {
+  if (!loadFromFile) {
     const vectorStore = await faiss.FaissStore.fromTexts(
       docs,
       metadata,
@@ -53,13 +54,11 @@ export async function initModelByDocAndMetadata(docs: string[], metadata: object
     )
     await vectorStore.save("./vector.txt");
     return vectorStore
+  } else {
+    const vectorStore = await faiss.FaissStore.load("./vector.txt",
+      model,
+      { similarity: mod3.similarity.cosine }
+    );
+    return vectorStore
   }
-
-  // {
-  //   const vectorStore = await faiss.FaissStore.load("./vector.txt",
-  //     model,
-  //     { similarity: mod3.similarity.cosine }
-  //   );
-  //   return vectorStore
-  // }
 }
