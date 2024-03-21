@@ -3,6 +3,8 @@ import { lancasterStemmer } from './lancasterStemmer';
 import { stemmer } from './porterStemmer';
 import * as stopwords from './stop_words_english.json';
 
+export const _importDynamic = new Function('modulePath', 'return import(modulePath)');
+
 export function filterStopWords(texts: string[]): string[] {
   return texts
     .filter(word => !stopwords.includes(word));
