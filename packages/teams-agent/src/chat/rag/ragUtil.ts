@@ -1,5 +1,5 @@
 //import { lancasterStemmer } from 'lancaster-stemmer';
-import { lancasterStemmer } from 'lancaster-stemmer';
+import { lancasterStemmer } from './lancasterStemmer';
 import { stemmer } from './porterStemmer';
 import * as stopwords from './stop_words_english.json';
 
@@ -17,7 +17,7 @@ export function stemText(texts: string[]): string[] {
 }
 
 export function lancasterStemText(texts: string[]): string[] {
-  return texts.map(word => lancasterStemmer(word));
+  return texts.map(word => lancasterStemmer(word, {}));
 }
 
 export function prepareDiscription(text: string): string[] {
